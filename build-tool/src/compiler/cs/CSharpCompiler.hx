@@ -38,9 +38,34 @@ class CSharpCompiler extends Compiler
 		findCompiler();
 		writeProject();
 
+    var thirdPartyDir;
+    if ( data.defines.exists('debug') ) {
+      if ( data.defines.exists('editor') ) {
+        thirdPartyDir = '../../client/cs/bin/Debug_Editor';
+      } else {
+        thirdPartyDir = '../../client/cs/bin/Debug_iPhone';
+      }
+    } else {
+      if ( data.defines.exists('editor') ) {
+        thirdPartyDir = '../../client/cs/bin/Release_Editor';
+      } else {
+        thirdPartyDir = '../../client/cs/bin/Release_iPhone';
+      }
+    }
 
-		var args = ['/nologo', '/optimize' + (debug ? '-' : '+'), '/debug' + (debug ? '+' : '-'), '/unsafe' + (unsafe ? '+' : '-'), '/out:bin/' + this.name + "." + (dll ? "dll" : "exe"), '/target:' + (dll ? "library" : "exe") ];
-		if (data.main != null)
+		var args = [
+      '/nologo', 
+      '/optimize' + (debug ? '-' : '+'), 
+      '/debug' + (debug ? '+' : '-'), 
+      '/unsafe' + (unsafe ? '+' : '-'), 
+      '/out:bin/' + this.name + "." + (dll ? "dll" : "exe"), 
+      '/target:' + (dll ? "library" : "exe"),
+      '/reference:/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll',
+      '/reference:/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll',
+      '/reference:${thirdPartyDir}/ThirdParty.dll',
+      '/warn:1'
+    ];
+		if (data.main != null && !data.defines.exists('dll') )
 			args.push('/main:' + (data.main == "Main" ? "EntryPoint__Main" : data.main));
 		for (res in data.resources)
 			args.push('/res:src' + delim + 'Resources' + delim + res + ",src.Resources." + res);
@@ -50,7 +75,7 @@ class CSharpCompiler extends Compiler
 		var ret = 0;
 		try
 		{
-			Sys.println(this.path + this.compiler + " " + args.join(" "));
+			// Sys.println(this.path + this.compiler + " " + args.join(" "));
 			ret = Sys.command(this.path + this.compiler + (Sys.systemName() == "Windows" ? (this.compiler == "csc" ? ".exe" : ".bat") : ""), args);
 		}
 		catch (e:Dynamic)
