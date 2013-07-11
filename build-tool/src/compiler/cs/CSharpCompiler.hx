@@ -96,8 +96,10 @@ class CSharpCompiler extends Compiler
       if ( FileSystem.isDirectory(fname) ) {
         includeExtraFiles(fname, args);
       } else {
-        Sys.println(fname);
-        args.push(fname);
+        if ( fname.lastIndexOf(".cs") == fname.length-3 ) {
+          Sys.println('    including cs file: ' + fname);
+          args.push(fname);
+        }
       }
     }
   }
