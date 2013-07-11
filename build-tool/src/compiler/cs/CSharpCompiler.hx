@@ -60,11 +60,13 @@ class CSharpCompiler extends Compiler
       '/unsafe' + (unsafe ? '+' : '-'), 
       '/out:bin/' + this.name + "." + (dll ? "dll" : "exe"), 
       '/target:' + (dll ? "library" : "exe"),
-      '/reference:/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll',
       '/reference:/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll',
       '/reference:${thirdPartyDir}/ThirdParty.dll',
       '/warn:1'
     ];
+    if (data.defines.exists('editor') ) {
+      args.push('/reference:/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll');
+    }
 		if (data.main != null && !data.defines.exists('dll') )
 			args.push('/main:' + (data.main == "Main" ? "EntryPoint__Main" : data.main));
 		for (res in data.resources)
