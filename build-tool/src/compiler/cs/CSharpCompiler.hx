@@ -73,6 +73,7 @@ class CSharpCompiler extends Compiler
 			args.push('/res:src' + delim + 'Resources' + delim + res + ",src.Resources." + res);
 		for (file in data.modules)
 			args.push("src" + delim + file.path.split(".").join(delim) + ".cs");
+    includeExtraFiles('../../client/cs-unity', args);
 
 		var ret = 0;
 		try
@@ -88,6 +89,18 @@ class CSharpCompiler extends Compiler
 		if (ret != 0)
 			throw Error.BuildFailed;
 	}
+
+  private function includeExtraFiles(dir:String, args:Array<String>) : Void {
+    for (f in FileSystem.readDirectory(dir) ) {
+      var fname = dir+"/"+f;
+      if ( FileSystem.isDirectory(fname) ) {
+        includeExtraFiles(fname, args);
+      } else {
+        Sys.println(fname);
+        args.push(fname);
+      }
+    }
+  }
 
 	private function writeProject()
 	{
