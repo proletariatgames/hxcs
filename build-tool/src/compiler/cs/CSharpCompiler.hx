@@ -41,15 +41,15 @@ class CSharpCompiler extends Compiler
     var thirdPartyDir;
     if ( data.defines.exists('debug') ) {
       if ( data.defines.exists('editor') ) {
-        thirdPartyDir = '../../client/cs/bin/Debug_Editor';
+        thirdPartyDir = '../../client/thirdparty/bin/Debug_Editor';
       } else {
-        thirdPartyDir = '../../client/cs/bin/Debug_iPhone';
+        thirdPartyDir = '../../client/thirdparty/bin/Debug_iPhone';
       }
     } else {
       if ( data.defines.exists('editor') ) {
-        thirdPartyDir = '../../client/cs/bin/Release_Editor';
+        thirdPartyDir = '../../client/thirdparty/bin/Release_Editor';
       } else {
-        thirdPartyDir = '../../client/cs/bin/Release_iPhone';
+        thirdPartyDir = '../../client/thirdparty/bin/Release_iPhone';
       }
     }
 
@@ -73,7 +73,7 @@ class CSharpCompiler extends Compiler
 			args.push('/res:src' + delim + 'Resources' + delim + res + ",src.Resources." + res);
 		for (file in data.modules)
 			args.push("src" + delim + file.path.split(".").join(delim) + ".cs");
-    includeExtraFiles('../../client/cs-unity', args);
+    includeExtraFiles('../../client/cs', args);
 
 		var ret = 0;
 		try
