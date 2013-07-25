@@ -62,6 +62,7 @@ class CSharpCompiler extends Compiler
       '/target:' + (dll ? "library" : "exe"),
       '/reference:/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll',
       '/reference:${thirdPartyDir}/ThirdParty.dll',
+      '/reference:${thirdPartyDir}/DecalSystem.Runtime.dll',
       '/warn:1'
     ];
     if (data.defines.exists('editor') ) {
